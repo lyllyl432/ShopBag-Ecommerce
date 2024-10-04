@@ -2,18 +2,29 @@ import React, { useState } from "react";
 import { Link } from "@inertiajs/react";
 import FormInput from "./components/FormInput";
 import Button from "./components/Button";
+import { useForm, Head } from "@inertiajs/react";
 
 const SignIn = () => {
+    const { data, setData, post, processing, reset, errors } = useForm({
+        email: "",
+        password: "",
+    });
     const [passwordMode, setPasswordMode] = useState(true);
     const [passwordValue, setPasswordValue] = useState("");
     const handlePasswordMode = () => {
         setPasswordMode(!passwordMode);
     };
     const handleChangePassword = (e) => {
+        setData("password", e.target.value);
         setPasswordValue(e.target.value);
+    };
+    const submit = (e) => {
+        e.preventDefault();
+        post(route("auth.authenticate"), { onSuccess: () => reset() });
     };
     return (
         <>
+            <Head title="Sign In" />
             <main className="flex items-center justify-center min-h-screen px-4 lg:px-0 lg:max-w-screen-xl lg:mx-auto lg:relative">
                 <div>
                     <img
@@ -42,11 +53,21 @@ const SignIn = () => {
                                 </Link>
                             }
                         </p>
-                        <form action="" method="post" className="mt-4">
+                        <form onSubmit={submit} method="post" className="mt-4">
                             <FormInput
                                 className="w-full p-4 bg-secondary placeholder:text-color-text rounded-md"
                                 placeholder="Email"
+                                type="text"
+                                name="email"
+                                onChange={(e) =>
+                                    setData("email", e.target.value)
+                                }
                             ></FormInput>
+                            {errors.email && (
+                                <span className="text-body-small">
+                                    {errors.email}
+                                </span>
+                            )}
                             <div className="mt-4">
                                 <div className="relative">
                                     <FormInput
@@ -56,6 +77,7 @@ const SignIn = () => {
                                         }
                                         onChange={handleChangePassword}
                                         placeholder="Password"
+                                        name="password"
                                     ></FormInput>
                                     {passwordValue !== "" ? (
                                         <div
@@ -105,7 +127,10 @@ const SignIn = () => {
                                     )}
                                 </div>
                             </div>
-                            <Button className="w-full mt-4 px-4 py-2 bg-accent text-white rounded-xl">
+                            <Button
+                                className="w-full mt-4 px-4 py-2 bg-accent text-white rounded-xl"
+                                disabled={processing}
+                            >
                                 Log in
                             </Button>
                         </form>
