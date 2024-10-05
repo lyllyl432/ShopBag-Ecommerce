@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "@inertiajs/react";
-import FormInput from "./components/FormInput";
-import Button from "./components/Button";
+import FormInput from "../components/FormInput";
+import Button from "../components/Button";
 import { useForm, Head } from "@inertiajs/react";
 
 const SignIn = () => {
     const { data, setData, post, processing, reset, errors } = useForm({
+        first_name: "",
+        last_name: "",
         email: "",
         password: "",
     });
@@ -20,11 +22,11 @@ const SignIn = () => {
     };
     const submit = (e) => {
         e.preventDefault();
-        post(route("auth.authenticate"), { onSuccess: () => reset() });
+        post(route("signup.store"), { onSuccess: () => reset() });
     };
     return (
         <>
-            <Head title="Sign In" />
+            <Head title="Sign Up" />
             <main className="flex items-center justify-center min-h-screen px-4 lg:px-0 lg:max-w-screen-xl lg:mx-auto lg:relative">
                 <div>
                     <img
@@ -33,35 +35,72 @@ const SignIn = () => {
                     />
                 </div>
                 <div className="flex-1">
-                    <div className="lg:max-w-md lg:mx-auto">
+                    <div className="lg:max-w-lg lg:mx-auto">
                         <img
                             className="mx-auto lg:absolute lg:-top-2 lg:-left-10"
                             src="images/logo.png"
                             alt="logo"
                         />
                         <h1 className="lg:text-display-2 text-display-4 font-semibold">
-                            LOG IN ACCOUNT
+                            CREATE AN ACCOUNT
                         </h1>
                         <p className="mt-4 text-body-small">
-                            Create an account{" "}
+                            Already have an account?{" "}
                             {
                                 <Link
-                                    href="/signup"
+                                    href="/signin"
                                     className="underline text-accent"
                                 >
-                                    Sign up
+                                    Log in
                                 </Link>
                             }
                         </p>
-                        <form onSubmit={submit} method="post" className="mt-4">
+                        <form onSubmit={submit} className="mt-4">
+                            <div className="lg:flex lg:gap-2">
+                                <div className="lg:flex-1">
+                                    <FormInput
+                                        className="w-full p-4 bg-secondary placeholder:text-color-text rounded-md"
+                                        placeholder="First Name"
+                                        name="first_name"
+                                        onChange={(e) =>
+                                            setData(
+                                                "first_name",
+                                                e.target.value
+                                            )
+                                        }
+                                        value={data.first_name}
+                                    ></FormInput>
+                                    {errors.first_name && (
+                                        <span className="text-body-small">
+                                            {errors.first_name}
+                                        </span>
+                                    )}
+                                </div>
+                                <div className="lg:flex-1">
+                                    <FormInput
+                                        className="w-full p-4 mt-4 lg:mt-0 bg-secondary placeholder:text-color-text rounded-md"
+                                        placeholder="Last Name"
+                                        name="last_name"
+                                        onChange={(e) =>
+                                            setData("last_name", e.target.value)
+                                        }
+                                        value={data.last_name}
+                                    ></FormInput>
+                                    {errors.last_name && (
+                                        <span className="text-body-small">
+                                            {errors.last_name}
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
                             <FormInput
-                                className="w-full p-4 bg-secondary placeholder:text-color-text rounded-md"
+                                className="w-full p-4 bg-secondary placeholder:text-color-text rounded-md mt-4"
                                 placeholder="Email"
-                                type="text"
                                 name="email"
                                 onChange={(e) =>
                                     setData("email", e.target.value)
                                 }
+                                value={data.email}
                             ></FormInput>
                             {errors.email && (
                                 <span className="text-body-small">
@@ -79,6 +118,11 @@ const SignIn = () => {
                                         placeholder="Password"
                                         name="password"
                                     ></FormInput>
+                                    {errors.password && (
+                                        <span className="text-body-small">
+                                            {errors.password}
+                                        </span>
+                                    )}
                                     {passwordValue !== "" ? (
                                         <div
                                             className="absolute top-1/2 -translate-y-1/2 right-4 cursor-pointer"

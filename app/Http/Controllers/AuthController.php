@@ -17,12 +17,12 @@ class AuthController extends Controller
 
     public function index()
     {
-        return Inertia::render('SignIn', []);
+        return Inertia::render('Auth/SignIn', []);
     }
 
     public function signup()
     {
-        return Inertia::render('SignUp', []);
+        return Inertia::render('Auth/SignUp', []);
     }
 
     public function store(Request $request)
@@ -45,7 +45,6 @@ class AuthController extends Controller
     }
     public function authenticate(Request $request)
     {
-        // dd($request);
         $credentials = $request->validate([
             'email' => ['required', 'email:rfc,dns'],
             'password' => ['required']
