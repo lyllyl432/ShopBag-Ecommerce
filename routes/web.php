@@ -19,6 +19,10 @@ Route::get('/shop', function () {
 Route::get('/cart', function () {
     return Inertia::render('Main/Cart', []);
 })->name('cart');
+Route::get('/checkout', function () {
+    return Inertia::render('Main/Checkout', []);
+})->name('checkout');
+
 
 
 

@@ -2,7 +2,7 @@ import React from "react";
 
 const Variation = () => {
     return (
-        <div className="relative">
+        <div className="relative cursor-pointer">
             <div className="flex gap-3 items-center">
                 <p>VARIATIONS</p>
                 <svg
