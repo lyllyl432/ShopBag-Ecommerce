@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import Product from "./Product";
+import Product from "../Product";
 
 export default class ProductList extends React.Component {
     state = {

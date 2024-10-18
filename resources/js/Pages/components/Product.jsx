@@ -14,8 +14,8 @@ const Product = ({ product }) => {
                 <h4 className="body-small font-semibold mt-8">
                     {product.productName}
                 </h4>
-                <p className="font-light">{product.categoryName}</p>
-                <p className="font-semibold">{product.productPrice}</p>
+                <p className="font-light">{product.brand.brandName}</p>
+                <p className="font-semibold">₱ {product.productPrice}</p>
             </div>
             <div className="absolute right-4 bottom-4 transition-opacity duration-1000 ease-out opacity-0 invisible group-hover:opacity-100 group-hover:visible">
                 <svg
