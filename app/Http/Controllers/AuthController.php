@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth as FacadesAuth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
@@ -41,18 +42,23 @@ class AuthController extends Controller
 
         return redirect(route('signin.index'));
     }
-    public function authenticate(Request $request)
+    public function authenticate(LoginRequest $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email:rfc,dns'],
-            'password' => ['required']
-        ]);
-        if (FacadesAuth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->intended('shop');
-        }
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+        // $credentials = $request->validate([
+        //     'email' => ['required', 'email:rfc,dns'],
+        //     'password' => ['required']
+        // ]);
+        // if (Auth::attempt($credentials)) {
+        //     $request->session()->regenerate();
+        //     return redirect()->intended('shop');
+        // }
+        // return back()->withErrors([
+        //     'email' => 'The provided credentials do not match our records.',
+        // ])->onlyInput('email');
+        $request->authenticate();
+
+        $request->session()->regenerate();
+
+        return to_route('shop');
     }
 }

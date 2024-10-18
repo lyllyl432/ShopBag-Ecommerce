@@ -10,9 +10,12 @@ Route::group(['middleware' => 'guest'], function () {
     Route::get('/signin', [AuthController::class, 'index'])->name('signin.index');
     Route::get('/signup', [AuthController::class, 'signup']);
     Route::post('/store', [AuthController::class, 'store'])->name('signup.store');
+    Route::post('/authenticate', [AuthController::class, 'authenticate'])->name('auth.authenticate');
 });
 
-Route::post('/authenticate', [AuthController::class, 'authenticate'])->name('auth.authenticate');
+
+
+
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/', function () {
         return Inertia::render('Main/Shop', []);
