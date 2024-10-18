@@ -6,25 +6,24 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 
-Route::get('/signin', [AuthController::class, 'index'])->name('signin.index')->middleware('guest');
-Route::get('/signup', [AuthController::class, 'signup'])->middleware('guest');
-Route::post('/store', [AuthController::class, 'store'])->name('signup.store')->middleware('guest');
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('/signin', [AuthController::class, 'index'])->name('signin.index');
+    Route::get('/signup', [AuthController::class, 'signup']);
+    Route::post('/store', [AuthController::class, 'store'])->name('signup.store');
+});
+
 Route::post('/authenticate', [AuthController::class, 'authenticate'])->name('auth.authenticate');
-// Route::get('/shop', function () {
-//     return Inertia::render('Shop', []);
-// })->name('shop')->middleware(PreventBackHistory::class);
-Route::get('/shop', function () {
-    return Inertia::render('Main/Shop', []);
-})->name('shop');
-Route::get('/cart', function () {
-    return Inertia::render('Main/Cart', []);
-})->name('cart');
-Route::get('/checkout', function () {
-    return Inertia::render('Main/Checkout', []);
-})->name('checkout');
-
-
-
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/', function () {
+        return Inertia::render('Main/Shop', []);
+    })->name('shop');
+    Route::get('/cart', function () {
+        return Inertia::render('Main/Cart', []);
+    })->name('cart');
+    Route::get('/checkout', function () {
+        return Inertia::render('Main/Checkout', []);
+    })->name('checkout');
+});
 
 Route::get('/logout', function () {
     Auth::logout();

@@ -66,7 +66,7 @@ return [
         ],
         'auths' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Auth::class, // Reference your Auth model
+            'model' => App\Models\User::class, // Reference your Auth model
         ],
 
         // 'users' => [

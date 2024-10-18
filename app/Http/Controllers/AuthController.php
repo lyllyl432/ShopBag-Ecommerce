@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Auth;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
@@ -30,15 +29,14 @@ class AuthController extends Controller
         $validated = $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => ['required', 'email:rfc,dns', 'unique:App\Models\Auth,email'],
+            'email' => ['required', 'email:rfc,dns', 'unique:App\Models\User,email'],
             'password' => ['required', Password::min(8)]
         ]);
         $validated['password'] = Hash::make($validated['password']);
-        $user = User::create(
-            ['first_name' => $validated['first_name'], 'last_name' => $validated['last_name']]
-        );
-        Auth::create(
-            ['email' => $validated['email'], 'password' => $validated['password'], 'user_id' => $user['id']]
+
+
+        User::create(
+            ['first_name' => $validated['first_name'], 'last_name' => $validated['last_name'], 'email' => $validated['email'], 'password' => $validated['password']]
         );
 
         return redirect(route('signin.index'));
