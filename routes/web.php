@@ -7,9 +7,9 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 
 Route::group(['middleware' => 'guest'], function () {
-    Route::get('/signin', [AuthController::class, 'index'])->name('signin.index');
-    Route::get('/signup', [AuthController::class, 'signup']);
-    Route::post('/store', [AuthController::class, 'store'])->name('signup.store');
+    Route::get('/signin', [AuthController::class, 'index'])->name('auth.signin');
+    Route::get('/signup', [AuthController::class, 'signup'])->name('auth.signup');
+    Route::post('/store', [AuthController::class, 'store'])->name('auth.store');
     Route::post('/authenticate', [AuthController::class, 'authenticate'])->name('auth.authenticate');
 });
 

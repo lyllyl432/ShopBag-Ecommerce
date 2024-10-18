@@ -1,6 +1,6 @@
 import React from "react";
 
-const Product = () => {
+const Product = ({ product }) => {
     return (
         <div className="bg-primary p-4 rounded-xl transition-opacity duration-1000 text-white relative group before:absolute before:h-full before:top-0 before:right-0 before:left-0 before:bottom-0 before:bg-black before:opacity-0 before:rounded-xl hover:before:opacity-30 before:z-0">
             <div className="overflow-hidden">
@@ -12,10 +12,10 @@ const Product = () => {
             </div>
             <div className="z-10 relative">
                 <h4 className="body-small font-semibold mt-8">
-                    SHIBUYA TOTEPACK
+                    {product.productName}
                 </h4>
-                <p className="font-light">Recycled PET Rip Stop</p>
-                <p className="font-semibold">₱ 1000</p>
+                <p className="font-light">{product.categoryName}</p>
+                <p className="font-semibold">{product.productPrice}</p>
             </div>
             <div className="absolute right-4 bottom-4 transition-opacity duration-1000 ease-out opacity-0 invisible group-hover:opacity-100 group-hover:visible">
                 <svg

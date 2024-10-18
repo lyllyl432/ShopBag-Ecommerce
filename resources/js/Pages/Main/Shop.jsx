@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../components/Layout";
 import { Head } from "@inertiajs/react";
 import Selector from "../components/Selector";
-import Product from "../components/Product";
+import ProductList from "../components/ProductList";
 
 const Shop = () => {
     return (
@@ -53,10 +53,7 @@ const Shop = () => {
                     ></Selector>
                 </div>
                 <div className="mt-8 grid gap-y-2 md:grid-cols-2 md:gap-x-2 xl:grid-cols-4">
-                    <Product></Product>
-                    <Product></Product>
-                    <Product></Product>
-                    <Product></Product>
+                    <ProductList></ProductList>
                 </div>
             </Layout>
         </>

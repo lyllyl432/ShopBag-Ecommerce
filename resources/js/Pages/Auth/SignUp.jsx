@@ -22,7 +22,7 @@ const SignIn = () => {
     };
     const submit = (e) => {
         e.preventDefault();
-        post(route("signup.store"), { onSuccess: () => reset() });
+        post(route("auth.store"), { onSuccess: () => reset() });
     };
     return (
         <>

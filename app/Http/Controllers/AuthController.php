@@ -40,7 +40,7 @@ class AuthController extends Controller
             ['first_name' => $validated['first_name'], 'last_name' => $validated['last_name'], 'email' => $validated['email'], 'password' => $validated['password']]
         );
 
-        return redirect(route('signin.index'));
+        return redirect(route('auth.signin'));
     }
     public function authenticate(LoginRequest $request)
     {
@@ -60,5 +60,16 @@ class AuthController extends Controller
         $request->session()->regenerate();
 
         return to_route('shop');
+    }
+
+    public function logout(Request $request): RedirectResponse
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }
