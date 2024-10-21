@@ -14,7 +14,7 @@ const Selector = ({ title, selected, children, ...props }) => {
                 className={
                     !isSelectionVisible
                         ? "hidden"
-                        : "absolute bg-white w-full left-0 top-16 z-20 p-4 rounded-xl space-y-4"
+                        : "absolute bg-white w-full left-0 top-16 z-20 p-4 rounded-xl space-y-4 h-40 overflow-scroll overflow-x-hidden"
                 }
             >
                 {children}

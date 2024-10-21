@@ -1,10 +1,14 @@
 import React from "react";
-import { Link } from "@inertiajs/react";
 
-const BrandSelection = ({ brand }) => {
+const BrandSelection = ({ brand, handleOnClick, setBrandId }) => {
     return (
-        <li className="hover:underline">
-            <Link>{brand.brandName}</Link>
+        <li
+            onClick={(e) => handleOnClick(e, setBrandId)}
+            data-brand-id={brand.id}
+            data-brand-name={brand.brandName}
+            className="hover:underline"
+        >
+            {brand.brandName}
         </li>
     );
 };

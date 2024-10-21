@@ -44,17 +44,6 @@ class AuthController extends Controller
     }
     public function authenticate(LoginRequest $request)
     {
-        // $credentials = $request->validate([
-        //     'email' => ['required', 'email:rfc,dns'],
-        //     'password' => ['required']
-        // ]);
-        // if (Auth::attempt($credentials)) {
-        //     $request->session()->regenerate();
-        //     return redirect()->intended('shop');
-        // }
-        // return back()->withErrors([
-        //     'email' => 'The provided credentials do not match our records.',
-        // ])->onlyInput('email');
         $request->authenticate();
 
         $request->session()->regenerate();

@@ -1,12 +1,17 @@
 import React from "react";
 import { Link } from "@inertiajs/react";
 
-const BrandSelection = ({ category }) => {
+const CategorySelection = ({ category, handleOnClick, setCategoryId }) => {
     return (
-        <li className="hover:underline">
-            <Link>{category.categoryName}</Link>
+        <li
+            onClick={(e) => handleOnClick(e, setCategoryId)}
+            data-category-id={category.id}
+            data-category-name={category.categoryName}
+            className="hover:underline"
+        >
+            {category.categoryName}
         </li>
     );
 };
 
-export default BrandSelection;
+export default CategorySelection;
