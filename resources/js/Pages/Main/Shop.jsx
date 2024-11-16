@@ -24,17 +24,6 @@ const Shop = () => {
                     <div className="grid grid-cols-2 gap-2 mt-4 md:flex xl:relative">
                         <BrandList />
                         <CategoryList />
-
-                        {/* <Selector
-                        selections={[
-                            "FROM - 0 - 1000 PESOS",
-                            "NIKE",
-                            "ADIDAS",
-                            "JOURNEY",
-                        ]}
-                        title="PRICES"
-                        className="bg-white px-4 py-2 relative rounded-lg flex-1  xl:flex-initial xl:w-56 xl:absolute xl:right-4 md:self-stretch cursor-pointer"
-                    ></Selector> */}
                     </div>
                     <div className="mt-8 grid gap-y-2 md:grid-cols-2 md:gap-x-2 xl:grid-cols-4">
                         <LevelContext.Consumer>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Middleware\PreventBackHistory;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -20,9 +21,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/', function () {
         return Inertia::render('Main/Shop', []);
     })->name('shop');
-    Route::get('/cart', function () {
-        return Inertia::render('Main/Cart', []);
-    })->name('cart');
+    Route::resource('cart', CartController::class);
     Route::get('/checkout', function () {
         return Inertia::render('Main/Checkout', []);
     })->name('checkout');

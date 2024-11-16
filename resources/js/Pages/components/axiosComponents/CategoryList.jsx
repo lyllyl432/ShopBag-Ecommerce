@@ -18,7 +18,6 @@ export default class CategoryList extends React.Component {
             })
             .then((res) => {
                 const categories = res.data;
-                console.log(categories);
                 this.setState({ categories });
             })
             .catch((error) => {

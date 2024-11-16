@@ -2,7 +2,7 @@ import React from "react";
 import Variation from "./Variation";
 import Quantity from "./Quantity";
 import { Link } from "@inertiajs/react";
-const ProductCart = ({ type }) => {
+const ProductCart = ({ type, product }) => {
     return (
         <div className="flex items-center gap-4 bg-primary rounded-xl p-4 mt-4">
             {type === "cart" && <input type="checkbox" className="lg:size-6" />}
@@ -14,7 +14,7 @@ const ProductCart = ({ type }) => {
             <div className="flex-1 text-white md:flex">
                 <div className="lg:flex lg:gap-8 lg:flex-initial md:block">
                     <div>
-                        <h6>SHIBUYA TOTEPACK</h6>
+                        <h6>{product.productName}</h6>
                         <p>Recycled PET RIP Stop </p>
                     </div>
                     <Variation></Variation>
@@ -24,7 +24,7 @@ const ProductCart = ({ type }) => {
                         type === "cart" ? " lg:gap-20" : "md:gap-8 lg:gap-32"
                     }`}
                 >
-                    <p>₱1000</p>
+                    <p>₱{product.productPrice}</p>
                     {type === "cart" ? (
                         <Quantity></Quantity>
                     ) : (

@@ -45,6 +45,7 @@ export default class ProductList extends React.Component {
                 headers: { Authorization: `Bearer ${this.#accessToken}` },
             })
             .then((res) => {
+                console.log(res);
                 const products = res.data;
                 this.setState({ products });
             })

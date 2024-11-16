@@ -18,7 +18,6 @@ export default class BrandList extends React.Component {
             })
             .then((res) => {
                 const brands = res.data;
-                console.log(brands);
                 this.setState({ brands });
             })
             .catch((error) => {
