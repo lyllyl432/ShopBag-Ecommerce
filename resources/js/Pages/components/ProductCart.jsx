@@ -2,10 +2,22 @@ import React from "react";
 import Variation from "./Variation";
 import Quantity from "./Quantity";
 import { Link } from "@inertiajs/react";
-const ProductCart = ({ type, product }) => {
+const ProductCart = ({
+    type,
+    product,
+    handleProductSelect,
+    isProductChecked,
+}) => {
     return (
         <div className="flex items-center gap-4 bg-primary rounded-xl p-4 mt-4">
-            {type === "cart" && <input type="checkbox" className="lg:size-6" />}
+            {type === "cart" && (
+                <input
+                    type="checkbox"
+                    className="lg:size-6"
+                    onChange={handleProductSelect}
+                    checked={isProductChecked(product.id)}
+                />
+            )}
             <img
                 className="w-20 md:w-20"
                 src="images/product.png"
