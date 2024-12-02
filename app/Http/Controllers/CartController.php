@@ -17,8 +17,8 @@ class CartController extends Controller
      */
     public function index()
     {
-        $productIds = Cart::all()->pluck('product_id')->toArray();
-        return Inertia::render('Main/Cart', ['productIds' => $productIds]);
+        $cartItems = Cart::select('id', 'quantity', 'product_id')->get()->toArray();
+        return Inertia::render('Main/Cart', ['cartItems' => $cartItems]);
     }
 
     /**
@@ -26,7 +26,7 @@ class CartController extends Controller
      */
     public function create()
     {
-        //
+        dd('hello world');
     }
 
     /**
@@ -63,9 +63,17 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCartRequest $request, Cart $cart)
+    public function update(Request $request, Cart $cart)
     {
-        //
+
+        $validatedData = $request->validate([
+            'quantity' => 'required|integer|min:1', // Ensure quantity is valid
+        ]);
+
+        // Update the quantity of the cart item
+        $cart->quantity = $validatedData['quantity'];
+        $cart->save();
+        return response()->json(['message' => 'Data updated successfully!'], 200);
     }
 
     /**

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Variation from "./Variation";
 import Quantity from "./Quantity";
 import { Link } from "@inertiajs/react";
@@ -8,6 +8,7 @@ const ProductCart = ({
     handleProductSelect,
     isProductChecked,
 }) => {
+    const [initialQuantity, setInitialQuantity] = useState(product.quantity);
     return (
         <div className="flex items-center gap-4 bg-primary rounded-xl p-4 mt-4">
             {type === "cart" && (
@@ -38,13 +39,17 @@ const ProductCart = ({
                 >
                     <p>₱{product.productPrice}</p>
                     {type === "cart" ? (
-                        <Quantity></Quantity>
+                        <Quantity
+                            cartId={product.cartId}
+                            initialQuantity={initialQuantity}
+                            setInitialQuantity={setInitialQuantity}
+                        ></Quantity>
                     ) : (
                         <p className="hidden md:block">1</p>
                     )}
 
                     <p className="hidden md:block font-semibold text-background">
-                        ₱1000
+                        ₱{initialQuantity * product.productPrice}
                     </p>
                     {type === "cart" && (
                         <Link className="hidden md:inline-block" href="#">

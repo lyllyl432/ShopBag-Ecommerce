@@ -37,7 +37,10 @@ const Layout = ({ children }) => {
                         </li>
                     </ul>
                     <div className="lg:flex lg:gap-4 hidden">
-                        <div className="lg:flex lg:gap-x-2 cursor-pointer">
+                        <Link
+                            href="/cart"
+                            className="lg:flex lg:gap-x-2 cursor-pointer"
+                        >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -53,7 +56,8 @@ const Layout = ({ children }) => {
                                 />
                             </svg>
                             <p>Cart</p>
-                        </div>
+                        </Link>
+
                         <div className="lg:flex lg:gap-x-2 cursor-pointer">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"

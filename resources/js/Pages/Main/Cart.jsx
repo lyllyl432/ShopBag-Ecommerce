@@ -6,7 +6,7 @@ import Button from "../components/Button";
 import ProductTopBoard from "../components/ProductTopBoard";
 import ProductCart from "../components/ProductCart";
 import axios from "axios";
-const Cart = ({ productIds }) => {
+const Cart = ({ cartItems }) => {
     const [carts, setCart] = useState([]);
     const [selectedProducts, setSelectedProducts] = useState([]);
     //handle select all products
@@ -63,6 +63,8 @@ const Cart = ({ productIds }) => {
 
     //api key will hide soon
     const api = "7|Xt27EeIh3cvAYPiWj009Qt5FEPzYEGtC8rdbHAgscfef42fa";
+    const productIds = cartItems.map((cartItem) => cartItem.product_id);
+
     const data = { product_id: productIds };
     useEffect(() => {
         axios
@@ -70,6 +72,17 @@ const Cart = ({ productIds }) => {
                 headers: { Authorization: `Bearer ${api}` },
             })
             .then((response) => {
+                console.log(response.data);
+                response.data.data.forEach((data) => {
+                    data.products.forEach((product) => {
+                        const cartItem = cartItems.find(
+                            (item) => item.product_id === product.id
+                        );
+                        product.cartId = cartItem ? cartItem.id : 0;
+                        product.quantity = cartItem ? cartItem.quantity : 0;
+                    });
+                });
+
                 setCart(response.data);
             })
             .catch((error) => {
