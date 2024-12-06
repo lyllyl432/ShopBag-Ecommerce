@@ -43,6 +43,17 @@ class CartController extends Controller
 
         return redirect()->route('cart.index');
     }
+    //get product quantities
+    public function getQuantities(Request $request)
+    {
+        $request->validate([
+            'productIds' => 'required|array',
+            'productIds.*' => 'integer|exists:carts,product_id',
+        ]);
+        $quantities = Cart::whereIn('product_id', $request->input('productIds'))
+            ->pluck('quantity', 'product_id');
+        return response()->json(['quantities' => $quantities]);
+    }
 
     /**
      * Display the specified resource.

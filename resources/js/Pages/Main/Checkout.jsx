@@ -16,10 +16,10 @@ const Checkout = () => {
                     <ProductTopBoard title="Products Ordered"></ProductTopBoard>
                 </div>
                 <div className="mt-4">
-                    <ProductBoard></ProductBoard>
+                    {/* <ProductBoard></ProductBoard> */}
                 </div>
                 <div className="mt-4">
-                    <ProductCart type="checkout"></ProductCart>
+                    {/* <ProductCart type="checkout"></ProductCart> */}
                 </div>
                 <div className="mt-8">
                     <div className="flex justify-between">

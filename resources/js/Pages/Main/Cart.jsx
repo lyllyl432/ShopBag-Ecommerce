@@ -9,56 +9,81 @@ import axios from "axios";
 const Cart = ({ cartItems }) => {
     const [carts, setCart] = useState([]);
     const [selectedProducts, setSelectedProducts] = useState([]);
+    const [totals, setTotals] = useState({ totalQuantity: 0, totalAmount: 0 });
     //handle select all products
     const handleSelectAll = (e) => {
         if (!e.target.checked) {
             setSelectedProducts([]);
         } else {
-            let productIds = [];
-            for (let i = 0; i < carts.data.length; i++) {
-                for (let j = 0; j < carts.data[i].products.length; j++) {
-                    productIds.push(carts.data[i].products[j].id);
-                }
-            }
-            setSelectedProducts((prev) => [...prev, ...productIds]);
+            const allProducts = carts.flatMap((cart) =>
+                cart.products.map((product) => ({
+                    id: product.id,
+                    quantity: product.quantity,
+                }))
+            );
+
+            setSelectedProducts(allProducts);
         }
     };
+
     //handle select products by brand
     const handleBrandSelect = (e, brandId) => {
-        let productIds = [];
-        const brandProducts = carts.data.filter((cart) => cart.id === brandId);
+        let idQuantity = [];
+        const brandProducts = carts.filter((cart) => cart.id === brandId);
         for (let i = 0; i < brandProducts.length; i++) {
             for (let j = 0; j < brandProducts[i].products.length; j++) {
-                productIds.push(brandProducts[i].products[j].id);
+                idQuantity.push({
+                    id: brandProducts[i].products[j].id,
+                    quantity: brandProducts[i].products[j].quantity,
+                });
             }
         }
         if (e.target.checked) {
-            setSelectedProducts((prev) =>
-                Array.from(new Set([...prev, ...productIds]))
-            );
+            setSelectedProducts((prev) => [...prev, ...idQuantity]);
         } else {
             setSelectedProducts((prev) =>
-                prev.filter((id) => !productIds.includes(id))
+                prev.filter(
+                    (item) =>
+                        !idQuantity.some((product) => product.id === item.id)
+                )
             );
         }
     };
-    const handleProductSelect = (e, productId) => {
+    const handleProductSelect = (e, productId, quantity) => {
         if (e.target.checked) {
-            setSelectedProducts((prev) => [...prev, productId]);
+            setSelectedProducts((prev) => [
+                ...prev,
+                { id: productId, quantity },
+            ]);
         } else {
             setSelectedProducts((prev) =>
-                prev.filter((id) => id !== productId)
+                prev.filter((item) => item.id !== productId)
             );
         }
     };
     const isProductChecked = (productId) => {
-        return selectedProducts.includes(productId);
+        return selectedProducts.some((product) => product.id === productId);
     };
     const isBrandChecked = (brandId) => {
-        const brandProducts = carts.data
-            .filter((cart) => cart.id === brandId)
-            .map((p) => p.id);
-        return brandProducts.every((id) => selectedProducts.includes(id));
+        const brandProducts = carts
+            .filter((cart) => cart.id === brandId)[0]
+            .products.map((product) => ({
+                id: product.id,
+                quantity: product.quantity,
+            }));
+        // Check if all brand products are in selectedProducts
+        return brandProducts.every((product) =>
+            selectedProducts.some((selected) => selected.id === product.id)
+        );
+    };
+    // Add this function to check if all products are selected
+    const isAllSelected = () => {
+        const allProductsCount = carts.reduce(
+            (total, cart) => total + cart.products.length,
+            0
+        );
+
+        return selectedProducts.length === allProductsCount;
     };
 
     //api key will hide soon
@@ -72,7 +97,6 @@ const Cart = ({ cartItems }) => {
                 headers: { Authorization: `Bearer ${api}` },
             })
             .then((response) => {
-                console.log(response.data);
                 response.data.data.forEach((data) => {
                     data.products.forEach((product) => {
                         const cartItem = cartItems.find(
@@ -83,12 +107,33 @@ const Cart = ({ cartItems }) => {
                     });
                 });
 
-                setCart(response.data);
+                setCart(response.data.data);
             })
             .catch((error) => {
                 console.error("Error fetching cart data:", error);
             });
     }, []);
+
+    const calculateTotalCheckout = (selectedProducts) => {
+        let totalQuantity = 0;
+        let totalAmount = 0;
+        selectedProducts.forEach((selectedProduct) => {
+            carts.forEach((cart) => {
+                cart.products.forEach((product) => {
+                    if (product.id === selectedProduct.id) {
+                        totalQuantity += selectedProduct.quantity;
+                        totalAmount +=
+                            product.productPrice * selectedProduct.quantity;
+                    }
+                });
+            });
+        });
+        setTotals({ totalAmount, totalQuantity });
+    };
+    //reruns if the selected products change
+    useEffect(() => {
+        calculateTotalCheckout(selectedProducts);
+    }, [selectedProducts]);
     return (
         <>
             <Head title="Cart"></Head>
@@ -101,11 +146,12 @@ const Cart = ({ cartItems }) => {
                         checkbox={true}
                         title="Products"
                         handleSelectAll={handleSelectAll}
+                        isAllSelected={isAllSelected}
                     ></ProductTopBoard>
                 </div>
                 <div className="mb-20">
-                    {carts.data
-                        ? carts.data.map((cart) => (
+                    {carts
+                        ? carts.map((cart) => (
                               <div key={cart.id}>
                                   <ProductBoard
                                       checkbox={true}
@@ -120,12 +166,20 @@ const Cart = ({ cartItems }) => {
                                               key={product.id}
                                               type={"cart"}
                                               product={product}
-                                              handleProductSelect={
-                                                  handleProductSelect
-                                              }
+                                              handleProductSelect={(e) => {
+                                                  handleProductSelect(
+                                                      e,
+                                                      product.id,
+                                                      product.quantity
+                                                  );
+                                              }}
                                               isProductChecked={
                                                   isProductChecked
                                               }
+                                              setSelectedProducts={
+                                                  setSelectedProducts
+                                              }
+                                              setCart={setCart}
                                           ></ProductCart>
                                       );
                                   })}
@@ -135,7 +189,8 @@ const Cart = ({ cartItems }) => {
 
                     <div className="fixed bottom-0 right-4 flex gap-4 items-center text-color-text px-4 bg-secondary p-4 rounded-l-xl rounded-bl-xl md:right-0">
                         <p className="whitespace-nowrap">
-                            Total (0 Item): <span>₱ 0</span>
+                            Total ({totals["totalQuantity"]}):{" "}
+                            <span>₱ {totals["totalAmount"]}</span>
                         </p>
                         <Button className="w-full px-4 py-2 bg-accent text-white rounded-xl">
                             CHECK OUT

@@ -1,6 +1,11 @@
 import React from "react";
 
-const ProductTopBoard = ({ checkbox = false, title, handleSelectAll }) => {
+const ProductTopBoard = ({
+    checkbox = false,
+    title,
+    handleSelectAll,
+    isAllSelected,
+}) => {
     return (
         <>
             <div className="lg:flex justify-between items-center p-4 bg-primary rounded-xl text-white hidden">
@@ -12,6 +17,7 @@ const ProductTopBoard = ({ checkbox = false, title, handleSelectAll }) => {
                             name=""
                             id=""
                             onChange={(e) => handleSelectAll(e)}
+                            checked={isAllSelected()}
                         />
                     )}
                     <p>{title}</p>

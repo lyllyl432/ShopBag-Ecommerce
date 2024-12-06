@@ -22,6 +22,7 @@ Route::group(['middleware' => 'auth'], function () {
         return Inertia::render('Main/Shop', []);
     })->name('shop');
     Route::resource('cart', CartController::class);
+    Route::post('/cart/quantities', [CartController::class, 'getQuantities']);
     Route::get('/checkout', function () {
         return Inertia::render('Main/Checkout', []);
     })->name('checkout');

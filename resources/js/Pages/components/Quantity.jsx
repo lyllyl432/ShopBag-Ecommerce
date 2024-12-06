@@ -1,6 +1,13 @@
 import axios from "axios";
 
-const Quantity = ({ cartId, initialQuantity, setInitialQuantity }) => {
+const Quantity = ({
+    cartId,
+    productId,
+    initialQuantity,
+    setInitialQuantity,
+    setSelectedProducts,
+    setCart,
+}) => {
     const handleIncreaseQuantity = (cartId, currentQuantity) => {
         const url = route("cart.update", { cart: cartId });
         try {
@@ -8,6 +15,35 @@ const Quantity = ({ cartId, initialQuantity, setInitialQuantity }) => {
                 quantity: currentQuantity + 1,
             });
             setInitialQuantity(currentQuantity + 1);
+            setSelectedProducts((prev) => {
+                const existingIndex = prev.findIndex(
+                    (item) => item.id === productId
+                );
+                const newArray = [...prev];
+                if (existingIndex >= 0) {
+                    newArray[existingIndex].quantity = currentQuantity + 1;
+                }
+                return newArray;
+            });
+            setCart((prev) => {
+                let cartIndex;
+                let productIndex;
+                prev.forEach((cart) => {
+                    cart.products.forEach((item) => {
+                        if (item.id === productId) {
+                            cartIndex = prev.indexOf(cart);
+                            productIndex = cart.products.indexOf(item);
+                        }
+                    });
+                });
+                const newArray = [...prev];
+
+                if (cartIndex >= 0 && productIndex >= 0) {
+                    newArray[cartIndex].products[productIndex].quantity =
+                        currentQuantity + 1;
+                }
+                return newArray;
+            });
             console.log(response.data.message);
         } catch (error) {
             if (error.response) {
@@ -25,6 +61,35 @@ const Quantity = ({ cartId, initialQuantity, setInitialQuantity }) => {
                 quantity: currentQuantity - 1,
             });
             setInitialQuantity(currentQuantity - 1);
+            setSelectedProducts((prev) => {
+                const existingIndex = prev.findIndex(
+                    (item) => item.id === productId
+                );
+                const newArray = [...prev];
+                if (existingIndex >= 0) {
+                    newArray[existingIndex].quantity = currentQuantity - 1;
+                }
+                return newArray;
+            });
+            setCart((prev) => {
+                let cartIndex;
+                let productIndex;
+                prev.forEach((cart) => {
+                    cart.products.forEach((item) => {
+                        if (item.id === productId) {
+                            cartIndex = prev.indexOf(cart);
+                            productIndex = cart.products.indexOf(item);
+                        }
+                    });
+                });
+                const newArray = [...prev];
+
+                if (cartIndex >= 0 && productIndex >= 0) {
+                    newArray[cartIndex].products[productIndex].quantity =
+                        currentQuantity - 1;
+                }
+                return newArray;
+            });
             console.log(response.data.message);
         } catch (error) {
             if (error.response) {

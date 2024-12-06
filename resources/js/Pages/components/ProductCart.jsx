@@ -7,6 +7,8 @@ const ProductCart = ({
     product,
     handleProductSelect,
     isProductChecked,
+    setSelectedProducts,
+    setCart,
 }) => {
     const [initialQuantity, setInitialQuantity] = useState(product.quantity);
     return (
@@ -41,8 +43,11 @@ const ProductCart = ({
                     {type === "cart" ? (
                         <Quantity
                             cartId={product.cartId}
+                            productId={product.id}
                             initialQuantity={initialQuantity}
                             setInitialQuantity={setInitialQuantity}
+                            setSelectedProducts={setSelectedProducts}
+                            setCart={setCart}
                         ></Quantity>
                     ) : (
                         <p className="hidden md:block">1</p>
