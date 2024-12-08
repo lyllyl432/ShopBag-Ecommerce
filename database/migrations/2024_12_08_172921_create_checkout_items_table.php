@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Checkout;
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +15,7 @@ return new class extends Migration
         Schema::create('checkout_items', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Checkout::class)->constrained()->cascadeOnDelete();
-            $table->string('product_id');
+            $table->integer('product_id');
             $table->integer('quantity');
             $table->integer('price');
             $table->integer('sub_total');

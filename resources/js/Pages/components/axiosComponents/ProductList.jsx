@@ -1,11 +1,12 @@
 import React from "react";
 import axios from "axios";
 import Product from "../Product";
+import { API_KEY } from "../../../constants";
 export default class ProductList extends React.Component {
     state = {
         products: {},
     };
-    #accessToken = "7|Xt27EeIh3cvAYPiWj009Qt5FEPzYEGtC8rdbHAgscfef42fa";
+    #accessToken = API_KEY;
     componentDidMount() {
         this.fetchProducts();
     }

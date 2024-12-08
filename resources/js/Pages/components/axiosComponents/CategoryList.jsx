@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import CategorySelection from "../CategorySelection";
 import Selector from "../Selector";
+import { API_KEY } from "../../../constants";
 import { LevelContext } from "../../../Context/LevelContext";
 
 export default class CategoryList extends React.Component {
@@ -9,7 +10,7 @@ export default class CategoryList extends React.Component {
         categories: {},
         selectedCategory: "All Categories",
     };
-    #accessToken = "7|Xt27EeIh3cvAYPiWj009Qt5FEPzYEGtC8rdbHAgscfef42fa";
+    #accessToken = API_KEY;
 
     componentDidMount() {
         axios

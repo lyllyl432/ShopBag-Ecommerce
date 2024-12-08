@@ -5,6 +5,7 @@ import ProductBoard from "../components/ProductBoard";
 import Button from "../components/Button";
 import ProductTopBoard from "../components/ProductTopBoard";
 import ProductCart from "../components/ProductCart";
+import { API_KEY } from "../../constants";
 import axios from "axios";
 const Cart = ({ cartItems = [] }) => {
     const [carts, setCart] = useState([]);
@@ -121,8 +122,7 @@ const Cart = ({ cartItems = [] }) => {
         });
     };
 
-    //api key will hide soon
-    const api = "7|Xt27EeIh3cvAYPiWj009Qt5FEPzYEGtC8rdbHAgscfef42fa";
+    const api = API_KEY;
     const productIds = cartItems.map((cartItem) => cartItem.product_id);
     const data = { product_id: productIds };
     useEffect(() => {

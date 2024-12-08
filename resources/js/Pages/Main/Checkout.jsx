@@ -6,11 +6,11 @@ import ProductTopBoard from "../components/ProductTopBoard";
 import ProductBoard from "../components/ProductBoard";
 import ProductCart from "../components/ProductCart";
 import Button from "../components/Button";
+import { API_KEY, formatDate } from "../../constants";
 const Checkout = ({ checkouts = [] }) => {
     console.log(checkouts);
     const [checkoutItems, setCheckoutItems] = useState([]);
     const [totalPayment, setTotalPayment] = useState(0);
-    console.log(checkouts);
 
     const calculateTotalPayment = () => {
         let total = 0;
@@ -19,8 +19,61 @@ const Checkout = ({ checkouts = [] }) => {
         });
         setTotalPayment(total);
     };
+    //handle place order
+    const handlePlaceOrder = async () => {
+        try {
+            const checkoutData = checkouts.map((checkout) => ({
+                user_id: checkout.user_id,
+                shipping_fee: checkout.shipping_fee,
+                total_amount: checkout.total_amount,
+                total_quantity: checkout.total_quantity,
+                status: "P",
+                created_at: formatDate(checkout.created_at),
+                updated_at: formatDate(checkout.updated_at),
+            }));
+            const orderResponse = await axios.post(
+                "http://127.0.0.1:80/api/v1/orders/bulk",
+                checkoutData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${API_KEY}`,
+                        "Content-type": "application/json",
+                    },
+                }
+            );
+            const orderId = orderResponse.data.order_id[0];
+            const checkoutItemsData = checkouts.flatMap((checkout) =>
+                checkout.checkout_items.map((item) => ({
+                    sub_total: item.sub_total,
+                    product_id: item.product_id,
+                    quantity: item.quantity,
+                    price: item.price,
+                    order_id: orderId,
+                }))
+            );
+            console.log(checkoutItemsData);
+
+            const orderItemsResponse = await axios.post(
+                "http://127.0.0.1:80/api/v1/orderitems/bulk",
+                checkoutItemsData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${API_KEY}`,
+                        "Content-type": "application/json",
+                    },
+                }
+            );
+            console.log("Order placed successfully:", orderResponse.data);
+            console.log(
+                "Order Items placed successfully:",
+                orderItemsResponse.data
+            );
+        } catch (error) {
+            console.error("Error placing order:", error);
+        }
+    };
     //api key will hide soon
-    const api = "7|Xt27EeIh3cvAYPiWj009Qt5FEPzYEGtC8rdbHAgscfef42fa";
+    const api = API_KEY;
     const productIds = checkouts.flatMap((checkout) =>
         checkout.checkout_items.map((item) => item.product_id)
     );
@@ -103,7 +156,10 @@ const Checkout = ({ checkouts = [] }) => {
                                     ₱{totalPayment}
                                 </span>
                             </p>
-                            <Button className="w-full px-4 py-2 bg-accent text-white rounded-xl mt-4 mb-4">
+                            <Button
+                                onClick={handlePlaceOrder}
+                                className="w-full px-4 py-2 bg-accent text-white rounded-xl mt-4 mb-4"
+                            >
                                 Place Order
                             </Button>
                         </div>

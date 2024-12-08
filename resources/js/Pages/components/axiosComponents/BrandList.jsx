@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import BrandSelection from "../BrandSelection";
 import Selector from "../Selector";
+import { API_KEY } from "../../../constants";
 import { LevelContext } from "../../../Context/LevelContext";
 
 export default class BrandList extends React.Component {
@@ -9,7 +10,7 @@ export default class BrandList extends React.Component {
         brands: {},
         selectedBrand: "All Brands",
     };
-    #accessToken = "7|Xt27EeIh3cvAYPiWj009Qt5FEPzYEGtC8rdbHAgscfef42fa";
+    #accessToken = API_KEY;
 
     componentDidMount() {
         axios
