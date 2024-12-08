@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
-import { Head } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
 import ProductBoard from "../components/ProductBoard";
 import Button from "../components/Button";
 import ProductTopBoard from "../components/ProductTopBoard";
 import ProductCart from "../components/ProductCart";
 import axios from "axios";
-const Cart = ({ cartItems }) => {
+const Cart = ({ cartItems = [] }) => {
     const [carts, setCart] = useState([]);
     const [selectedProducts, setSelectedProducts] = useState([]);
     const [totals, setTotals] = useState({ totalQuantity: 0, totalAmount: 0 });
@@ -19,6 +19,7 @@ const Cart = ({ cartItems }) => {
                 cart.products.map((product) => ({
                     id: product.id,
                     quantity: product.quantity,
+                    cartId: product.cartId,
                 }))
             );
 
@@ -35,6 +36,7 @@ const Cart = ({ cartItems }) => {
                 idQuantity.push({
                     id: brandProducts[i].products[j].id,
                     quantity: brandProducts[i].products[j].quantity,
+                    cartId: brandProducts[i].products[j].cartId,
                 });
             }
         }
@@ -70,6 +72,7 @@ const Cart = ({ cartItems }) => {
             .products.map((product) => ({
                 id: product.id,
                 quantity: product.quantity,
+                cartId: product.cartId,
             }));
         // Check if all brand products are in selectedProducts
         return brandProducts.every((product) =>
@@ -85,11 +88,42 @@ const Cart = ({ cartItems }) => {
 
         return selectedProducts.length === allProductsCount;
     };
+    //handle checkout
+    const handleCheckout = () => {
+        // console.log(selectedProducts);
+        if (selectedProducts.length === 0) {
+            alert("Please select at least one product");
+            return;
+        }
+        // Get full product details for selected items
+        const checkoutItems = selectedProducts
+            .map((selected) => {
+                let productDetails = null;
+                carts.forEach((cart) => {
+                    cart.products.forEach((product) => {
+                        if (product.id === selected.id) {
+                            productDetails = {
+                                ...product,
+                                quantity: selected.quantity,
+                                cartId: selected.cartId,
+                            };
+                        }
+                    });
+                });
+                return productDetails;
+            })
+            .filter((item) => item !== null);
+
+        router.post(route("checkout.store"), {
+            items: checkoutItems,
+            total_amount: totals.totalAmount,
+            total_quantity: totals.totalQuantity,
+        });
+    };
 
     //api key will hide soon
     const api = "7|Xt27EeIh3cvAYPiWj009Qt5FEPzYEGtC8rdbHAgscfef42fa";
     const productIds = cartItems.map((cartItem) => cartItem.product_id);
-
     const data = { product_id: productIds };
     useEffect(() => {
         axios
@@ -192,7 +226,10 @@ const Cart = ({ cartItems }) => {
                             Total ({totals["totalQuantity"]}):{" "}
                             <span>₱ {totals["totalAmount"]}</span>
                         </p>
-                        <Button className="w-full px-4 py-2 bg-accent text-white rounded-xl">
+                        <Button
+                            onClick={handleCheckout}
+                            className="w-full px-4 py-2 bg-accent text-white rounded-xl"
+                        >
                             CHECK OUT
                         </Button>
                     </div>

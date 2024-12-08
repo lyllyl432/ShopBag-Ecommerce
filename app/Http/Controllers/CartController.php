@@ -24,24 +24,28 @@ class CartController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        dd('hello world');
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+
         $cart = $request->validate([
             'product_id' => 'required|integer'
         ]);
         $cart['user_id'] = Auth::id();
-        // dd($data);
-        Cart::create($cart);
 
-        return redirect()->route('cart.index');
+        $existingCart = Cart::where('product_id', $cart['product_id'])->first();
+        if ($existingCart) {
+            $existingCart->quantity += 1;
+            $existingCart->save();
+        } else {
+            Cart::create($cart);
+        }
+
+        return to_route('cart.index');
     }
     //get product quantities
     public function getQuantities(Request $request)
@@ -92,6 +96,7 @@ class CartController extends Controller
      */
     public function destroy(Cart $cart)
     {
-        //
+        $cart->delete();
+        return to_route('cart.index');
     }
 }

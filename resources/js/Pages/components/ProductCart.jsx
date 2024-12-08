@@ -1,16 +1,21 @@
 import React, { useState } from "react";
 import Variation from "./Variation";
 import Quantity from "./Quantity";
-import { Link } from "@inertiajs/react";
+import { router } from "@inertiajs/react";
+import Button from "./Button";
 const ProductCart = ({
     type,
-    product,
-    handleProductSelect,
-    isProductChecked,
-    setSelectedProducts,
-    setCart,
+    product = {},
+    handleProductSelect = () => {},
+    isProductChecked = () => {},
+    setSelectedProducts = () => {},
+    setCart = () => {},
 }) => {
     const [initialQuantity, setInitialQuantity] = useState(product.quantity);
+
+    const handleDelete = () => {
+        router.delete(route("cart.destroy", product.cartId));
+    };
     return (
         <div className="flex items-center gap-4 bg-primary rounded-xl p-4 mt-4">
             {type === "cart" && (
@@ -39,9 +44,11 @@ const ProductCart = ({
                         type === "cart" ? " lg:gap-20" : "md:gap-8 lg:gap-32"
                     }`}
                 >
+                    {/* {console.log(initialQuantity)} */}
                     <p>₱{product.productPrice}</p>
                     {type === "cart" ? (
                         <Quantity
+                            type="cart"
                             cartId={product.cartId}
                             productId={product.id}
                             initialQuantity={initialQuantity}
@@ -50,16 +57,14 @@ const ProductCart = ({
                             setCart={setCart}
                         ></Quantity>
                     ) : (
-                        <p className="hidden md:block">1</p>
+                        <p className="hidden md:block">{initialQuantity}</p>
                     )}
 
                     <p className="hidden md:block font-semibold text-background">
                         ₱{initialQuantity * product.productPrice}
                     </p>
                     {type === "cart" && (
-                        <Link className="hidden md:inline-block" href="#">
-                            Delete
-                        </Link>
+                        <Button onClick={handleDelete}>Delete</Button>
                     )}
                 </div>
             </div>

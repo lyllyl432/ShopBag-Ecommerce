@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Cart extends Model
+class Checkout extends Model
 {
     use HasFactory;
     protected $guarded = [];
@@ -13,5 +13,10 @@ class Cart extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function checkoutItems()
+    {
+        return $this->hasMany(CheckoutItem::class);
     }
 }

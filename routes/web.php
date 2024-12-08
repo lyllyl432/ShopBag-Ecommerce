@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Middleware\PreventBackHistory;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,9 +24,8 @@ Route::group(['middleware' => 'auth'], function () {
     })->name('shop');
     Route::resource('cart', CartController::class);
     Route::post('/cart/quantities', [CartController::class, 'getQuantities']);
-    Route::get('/checkout', function () {
-        return Inertia::render('Main/Checkout', []);
-    })->name('checkout');
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 });
 
 Route::get('/logout', function () {

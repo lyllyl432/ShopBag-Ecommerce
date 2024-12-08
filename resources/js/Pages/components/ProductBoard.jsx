@@ -3,9 +3,9 @@ import ProductCart from "./ProductCart";
 
 const ProductBoard = ({
     checkbox = false,
-    cart,
-    handleBrandSelect,
-    isBrandChecked,
+    cart = {},
+    handleBrandSelect = () => {},
+    isBrandChecked = () => {},
 }) => {
     return (
         <>

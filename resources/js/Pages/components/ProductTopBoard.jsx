@@ -3,8 +3,8 @@ import React from "react";
 const ProductTopBoard = ({
     checkbox = false,
     title,
-    handleSelectAll,
-    isAllSelected,
+    handleSelectAll = () => {},
+    isAllSelected = () => {},
 }) => {
     return (
         <>
