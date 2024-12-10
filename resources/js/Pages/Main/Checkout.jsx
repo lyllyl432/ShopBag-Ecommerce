@@ -9,7 +9,6 @@ import Button from "../components/Button";
 import { API_KEY } from "../../constants";
 import { formatDate } from "../../custom";
 const Checkout = ({ checkouts = [], user }) => {
-    console.log(checkouts);
     const [checkoutItems, setCheckoutItems] = useState([]);
     const [totalPayment, setTotalPayment] = useState(0);
     //calculate total payment for the checkout
@@ -24,7 +23,6 @@ const Checkout = ({ checkouts = [], user }) => {
     const handlePlaceOrder = async () => {
         try {
             const checkoutData = checkouts.map((checkout) => ({
-                shipping_fee: checkout.shipping_fee,
                 total_amount: checkout.total_amount,
                 total_quantity: checkout.total_quantity,
                 created_at: formatDate(checkout.created_at),
@@ -50,6 +48,8 @@ const Checkout = ({ checkouts = [], user }) => {
                     price: item.price,
                     status: "pending",
                     order_id: orderId,
+                    shipping_fee: checkout.shipping_fee,
+                    created_at: formatDate(checkout.created_at),
                 }))
             );
             console.log(checkoutItemsData);
@@ -115,7 +115,7 @@ const Checkout = ({ checkouts = [], user }) => {
                 </div>
                 {checkoutItems.length > 0 &&
                     checkoutItems.map((checkout) => (
-                        <div className="mt-4">
+                        <div className="mt-4" key={checkout.id}>
                             <ProductBoard
                                 cart={checkout}
                                 key={checkout.id}

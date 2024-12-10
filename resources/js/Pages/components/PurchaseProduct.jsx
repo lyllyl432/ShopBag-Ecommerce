@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-const PurchaseProduct = ({ data }) => {
+const PurchaseProduct = ({ data, setStatus }) => {
+    useEffect(() => {
+        setStatus(data.status);
+    }, [data.status]);
     return (
         <div className="flex justify-between items-center mt-4">
-            <div className="flex gap-1 items-center">
+            <div className="flex gap-4 items-center">
                 <div>
                     <img className="w-20" src="images/product.png" alt="" />
                 </div>

@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Head } from "@inertiajs/react";
 import Layout from "../components/Layout";
 import PurchaseTopBoard from "../components/PurchaseTopBoard";
-import PurchaseProductTopInfo from "../components/PurchaseProductTopInfo";
-import PurchaseProductBottomInfo from "../components/PurchaseProductBottomInfo";
-import PurchaseProduct from "../components/PurchaseProduct";
+
+import PurchaseWrapper from "../components/PurchaseWrapper";
 import axios from "axios";
 import { API_KEY } from "../../constants";
 const Purchase = ({ user }) => {
@@ -15,6 +14,7 @@ const Purchase = ({ user }) => {
                 headers: { Authorization: `Bearer ${API_KEY}` },
             })
             .then((response) => {
+                console.log(response.data.data);
                 setOrders(response.data.data);
             });
     }, []);
@@ -24,22 +24,7 @@ const Purchase = ({ user }) => {
             <Layout user={user}>
                 <PurchaseTopBoard user={user} setOrders={setOrders} />
                 {orders.map((order) => (
-                    <div
-                        key={`top-${order.brand}`}
-                        className="mt-4 bg-primary p-4 rounded-lg text-white"
-                    >
-                        <PurchaseProductTopInfo
-                            key={`product-top-${order.brand}`}
-                            data={order}
-                        />
-                        {order.items.map((item) => (
-                            <PurchaseProduct key={item.id} data={item} />
-                        ))}
-                        <PurchaseProductBottomInfo
-                            key={`bottom-${order.brand}`}
-                            data={order}
-                        />
-                    </div>
+                    <PurchaseWrapper key={order.brand} order={order} />
                 ))}
             </Layout>
         </>
