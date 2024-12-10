@@ -18,7 +18,8 @@ class CartController extends Controller
     public function index()
     {
         $cartItems = Cart::select('id', 'quantity', 'product_id')->get()->toArray();
-        return Inertia::render('Main/Cart', ['cartItems' => $cartItems]);
+        $user = Auth::user();
+        return Inertia::render('Main/Cart', ['cartItems' => $cartItems, 'user' => $user]);
     }
 
     /**

@@ -16,8 +16,10 @@ class CheckoutController extends Controller
         $checkouts = Checkout::with('checkoutItems')
             ->where('user_id', Auth::user()->id)
             ->get();
+        $user = Auth::user();
         return Inertia::render('Main/Checkout', [
             'checkouts' => $checkouts,
+            'user' => $user
         ]);
     }
 

@@ -7,7 +7,7 @@ import ProductTopBoard from "../components/ProductTopBoard";
 import ProductCart from "../components/ProductCart";
 import { API_KEY } from "../../constants";
 import axios from "axios";
-const Cart = ({ cartItems = [] }) => {
+const Cart = ({ cartItems = [], user }) => {
     const [carts, setCart] = useState([]);
     const [selectedProducts, setSelectedProducts] = useState([]);
     const [totals, setTotals] = useState({ totalQuantity: 0, totalAmount: 0 });
@@ -171,7 +171,7 @@ const Cart = ({ cartItems = [] }) => {
     return (
         <>
             <Head title="Cart"></Head>
-            <Layout>
+            <Layout user={user}>
                 <h1 className="mb-4 text-display-4 font-semibold">
                     ADD TO CARTS
                 </h1>

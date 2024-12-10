@@ -6,12 +6,13 @@ import ProductTopBoard from "../components/ProductTopBoard";
 import ProductBoard from "../components/ProductBoard";
 import ProductCart from "../components/ProductCart";
 import Button from "../components/Button";
-import { API_KEY, formatDate } from "../../constants";
-const Checkout = ({ checkouts = [] }) => {
+import { API_KEY } from "../../constants";
+import { formatDate } from "../../custom";
+const Checkout = ({ checkouts = [], user }) => {
     console.log(checkouts);
     const [checkoutItems, setCheckoutItems] = useState([]);
     const [totalPayment, setTotalPayment] = useState(0);
-
+    //calculate total payment for the checkout
     const calculateTotalPayment = () => {
         let total = 0;
         checkouts.forEach((checkout) => {
@@ -23,11 +24,9 @@ const Checkout = ({ checkouts = [] }) => {
     const handlePlaceOrder = async () => {
         try {
             const checkoutData = checkouts.map((checkout) => ({
-                user_id: checkout.user_id,
                 shipping_fee: checkout.shipping_fee,
                 total_amount: checkout.total_amount,
                 total_quantity: checkout.total_quantity,
-                status: "P",
                 created_at: formatDate(checkout.created_at),
                 updated_at: formatDate(checkout.updated_at),
             }));
@@ -44,10 +43,12 @@ const Checkout = ({ checkouts = [] }) => {
             const orderId = orderResponse.data.order_id[0];
             const checkoutItemsData = checkouts.flatMap((checkout) =>
                 checkout.checkout_items.map((item) => ({
+                    user_id: checkout.user_id,
                     sub_total: item.sub_total,
                     product_id: item.product_id,
                     quantity: item.quantity,
                     price: item.price,
+                    status: "pending",
                     order_id: orderId,
                 }))
             );
@@ -107,7 +108,7 @@ const Checkout = ({ checkouts = [] }) => {
     return (
         <>
             <Head title="Checkout"></Head>
-            <Layout>
+            <Layout user={user}>
                 <AddressBoard></AddressBoard>
                 <div className="mt-4">
                     <ProductTopBoard title="Products Ordered"></ProductTopBoard>

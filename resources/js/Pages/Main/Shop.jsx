@@ -6,12 +6,12 @@ import BrandList from "../components/axiosComponents/BrandList";
 import CategoryList from "../components/axiosComponents/CategoryList";
 import { LevelContext, LevelProvider } from "../../Context/LevelContext";
 
-const Shop = () => {
+const Shop = ({ user }) => {
     return (
         <>
             <Head title="Shopping"></Head>
             <LevelProvider>
-                <Layout>
+                <Layout user={user}>
                     <h1 className="text-display-3 font-semibold">
                         GET INSPIRED
                     </h1>
