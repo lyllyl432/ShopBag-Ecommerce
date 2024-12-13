@@ -28,8 +28,7 @@ class AuthController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
+            'username' => 'required',
             'email' => ['required', 'email:rfc,dns', 'unique:App\Models\User,email'],
             'password' => ['required', Password::min(8)]
         ]);
@@ -37,7 +36,7 @@ class AuthController extends Controller
 
 
         User::create(
-            ['first_name' => $validated['first_name'], 'last_name' => $validated['last_name'], 'email' => $validated['email'], 'password' => $validated['password']]
+            ['username' => $validated['username'], 'email' => $validated['email'], 'password' => $validated['password']]
         );
 
         return redirect(route('auth.signin'));
@@ -60,5 +59,41 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    //account update
+    public function accountUpdate(Request $request)
+    {
+        $request->validate([
+            'username' => 'required',
+            'email' => 'required|email|unique:users,email,' . Auth::id(),
+            'phone' => 'nullable|numeric|digits:11',
+            'date' => 'nullable|numeric|between:1,31',
+            'month' => 'nullable|numeric|between:1,12',
+            'year' => 'nullable|numeric|min:1900|max:' . date('Y'),
+            'gender' => 'nullable|in:male,female',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:1024',
+        ]);
+
+        // Get the current user instance
+        $user = User::find(Auth::id());
+
+        // Set attributes individually
+        $user->username = $request->username;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->date = $request->date;
+        $user->month = $request->month;
+        $user->year = $request->year;
+        $user->gender = $request->gender;
+
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+            $user->avatar = $avatarPath;
+        }
+        // Save the changes
+        $user->save();
+
+        return to_route('account.index');
     }
 }

@@ -6,8 +6,7 @@ import { useForm, Head } from "@inertiajs/react";
 
 const SignIn = () => {
     const { data, setData, post, processing, reset, errors } = useForm({
-        first_name: "",
-        last_name: "",
+        username: "",
         email: "",
         password: "",
     });
@@ -60,35 +59,16 @@ const SignIn = () => {
                                 <div className="lg:flex-1">
                                     <FormInput
                                         className="w-full p-4 bg-secondary placeholder:text-color-text rounded-md"
-                                        placeholder="First Name"
-                                        name="first_name"
+                                        placeholder="Username"
+                                        name="username"
                                         onChange={(e) =>
-                                            setData(
-                                                "first_name",
-                                                e.target.value
-                                            )
+                                            setData("username", e.target.value)
                                         }
-                                        value={data.first_name}
+                                        value={data.username}
                                     ></FormInput>
-                                    {errors.first_name && (
+                                    {errors.username && (
                                         <span className="text-body-small">
-                                            {errors.first_name}
-                                        </span>
-                                    )}
-                                </div>
-                                <div className="lg:flex-1">
-                                    <FormInput
-                                        className="w-full p-4 mt-4 lg:mt-0 bg-secondary placeholder:text-color-text rounded-md"
-                                        placeholder="Last Name"
-                                        name="last_name"
-                                        onChange={(e) =>
-                                            setData("last_name", e.target.value)
-                                        }
-                                        value={data.last_name}
-                                    ></FormInput>
-                                    {errors.last_name && (
-                                        <span className="text-body-small">
-                                            {errors.last_name}
+                                            {errors.username}
                                         </span>
                                     )}
                                 </div>
