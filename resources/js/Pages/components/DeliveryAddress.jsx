@@ -24,11 +24,13 @@ const DeliveryAddress = ({ address }) => {
                     </div>
                 </div>
                 <div className="mt-4">
-                    <span>{address.full_name}</span>
-                    <span>{address.phone_number}</span>
-                    <span>{address.street_address}</span>
+                    <span>{address ? address.full_name : ""}</span>
+                    <span>{address ? address.phone_number : ""}</span>
+                    <span>{address ? address.street_address : ""}</span>
                     <span>
-                        {address.full_address + " " + address.postal_code}
+                        {address
+                            ? address.full_address + " " + address.postal_code
+                            : ""}
                     </span>
                 </div>
             </div>

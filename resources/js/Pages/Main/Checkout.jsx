@@ -1,6 +1,6 @@
 import { useState, useEffect, React } from "react";
 import Layout from "../components/Layout";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import AddressBoard from "../components/AddressBoard";
 import ProductTopBoard from "../components/ProductTopBoard";
 import ProductBoard from "../components/ProductBoard";
@@ -9,6 +9,7 @@ import Button from "../components/Button";
 import { API_KEY } from "../../constants";
 import { formatDate } from "../../custom";
 const Checkout = ({ checkouts = [], user }) => {
+    // console.log(checkouts);
     const [checkoutItems, setCheckoutItems] = useState([]);
     const [totalPayment, setTotalPayment] = useState(0);
     //calculate total payment for the checkout
@@ -69,6 +70,7 @@ const Checkout = ({ checkouts = [], user }) => {
                 "Order Items placed successfully:",
                 orderItemsResponse.data
             );
+            router.visit(route("purchase.index"));
         } catch (error) {
             console.error("Error placing order:", error);
         }
