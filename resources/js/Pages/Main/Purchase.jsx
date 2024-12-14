@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Head } from "@inertiajs/react";
 import Layout from "../components/Layout";
 import PurchaseTopBoard from "../components/PurchaseTopBoard";
-
+import DeliveryAddress from "../components/DeliveryAddress";
 import PurchaseWrapper from "../components/PurchaseWrapper";
 import axios from "axios";
 import { API_KEY } from "../../constants";
-const Purchase = ({ user }) => {
+const Purchase = ({ user, address }) => {
     const [orders, setOrders] = useState([]);
     useEffect(() => {
         axios
@@ -23,6 +23,7 @@ const Purchase = ({ user }) => {
             <Head title="Purchase"></Head>
             <Layout user={user}>
                 <PurchaseTopBoard user={user} setOrders={setOrders} />
+                <DeliveryAddress address={address[0]} />
                 {orders.map((order) => (
                     <PurchaseWrapper key={order.brand} order={order} />
                 ))}

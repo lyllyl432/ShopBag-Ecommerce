@@ -11,6 +11,7 @@ const SettingsTopBoard = ({ title, desc, children }) => {
         >
             <h1 className="font-bold text-lg">{title}</h1>
             <p className="font-light text-sm">{desc}</p>
+            {children}
         </div>
     );
 };

@@ -15,10 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->string('full_name');
-            $table->string('country');
-            $table->string('city');
-            $table->string('street');
-            $table->string('zip_code');
+            $table->string('full_address');
+            $table->string('postal_code');
+            $table->string('street_address');
             $table->enum('type', ['home', 'pickup', 'office']);
             $table->boolean('is_default')->default(false);
             $table->timestamps();
