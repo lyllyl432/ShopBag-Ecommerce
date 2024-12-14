@@ -27,7 +27,7 @@ const Layout = ({ children, user }) => {
                     </div>
                     <ul className="hidden lg:flex lg:gap-x-6 lg:flex-1 lg:justify-center">
                         <li>
-                            <Link href="#">Shop</Link>
+                            <Link href={route("shop.index")}>Shop</Link>
                         </li>
                         <li>
                             <Link href="#">Collection</Link>
@@ -65,7 +65,7 @@ const Layout = ({ children, user }) => {
                                 className="w-10 h-10 rounded-full"
                             />
                             <p className="font-bold">{user.username}</p>
-                            <div className="hidden group-hover:block absolute top-11 right-0 bg-white p-2 rounded-md shadow-md w-full">
+                            <div className="hidden group-hover:block absolute top-10 right-0 bg-white p-4 rounded-md shadow-md ">
                                 <div className="flex flex-col gap-2">
                                     <Link href={route("account.index")}>
                                         Account
