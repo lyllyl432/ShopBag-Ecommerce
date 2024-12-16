@@ -16,9 +16,8 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Checkout::class)->constrained()->cascadeOnDelete();
             $table->integer('product_id');
-            $table->integer('quantity');
             $table->integer('price');
-            $table->integer('sub_total');
+            $table->integer('quantity');
             $table->timestamps();
         });
     }

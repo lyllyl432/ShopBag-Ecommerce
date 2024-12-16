@@ -14,7 +14,6 @@ const Purchase = ({ user, address }) => {
                 headers: { Authorization: `Bearer ${API_KEY}` },
             })
             .then((response) => {
-                console.log(response.data.data);
                 setOrders(response.data.data);
             });
     }, []);
@@ -24,8 +23,11 @@ const Purchase = ({ user, address }) => {
             <Layout user={user}>
                 <PurchaseTopBoard user={user} setOrders={setOrders} />
                 <DeliveryAddress address={address[0]} />
-                {orders.map((order) => (
-                    <PurchaseWrapper key={order.brand} order={order} />
+                {orders.map((data) => (
+                    <PurchaseWrapper
+                        key={data.grouped_orders.brand_name}
+                        grouped_orders={data.grouped_orders}
+                    />
                 ))}
             </Layout>
         </>

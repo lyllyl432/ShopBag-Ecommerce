@@ -1,10 +1,10 @@
 import React from "react";
 
-const PurchaseProductBottomInfo = ({ data }) => {
+const PurchaseProductBottomInfo = ({ item }) => {
     return (
         <div className="text-right">
             <p>
-                Order Total: <span>{data.subTotal + data.shippingFee}</span>
+                Order Total: <span>{item.total_amount}</span>
             </p>
         </div>
     );

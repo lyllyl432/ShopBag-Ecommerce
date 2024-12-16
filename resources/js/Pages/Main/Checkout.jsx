@@ -8,10 +8,11 @@ import ProductCart from "../components/ProductCart";
 import Button from "../components/Button";
 import { API_KEY } from "../../constants";
 import { formatDate } from "../../custom";
+import { generateOrderNumber } from "../../custom";
 const Checkout = ({ checkouts = [], user }) => {
-    // console.log(checkouts);
     const [checkoutItems, setCheckoutItems] = useState([]);
     const [totalPayment, setTotalPayment] = useState(0);
+    console.log(checkouts);
     //calculate total payment for the checkout
     const calculateTotalPayment = () => {
         let total = 0;
@@ -24,11 +25,16 @@ const Checkout = ({ checkouts = [], user }) => {
     const handlePlaceOrder = async () => {
         try {
             const checkoutData = checkouts.map((checkout) => ({
-                total_amount: checkout.total_amount,
-                total_quantity: checkout.total_quantity,
+                id: checkout.id,
+                user_id: checkout.user_id,
+                order_number: generateOrderNumber(),
+                total_amount: checkout.total_amount + checkout.shipping_fee,
+                shipping_fee: checkout.shipping_fee,
                 created_at: formatDate(checkout.created_at),
                 updated_at: formatDate(checkout.updated_at),
+                status: "pending",
             }));
+
             const orderResponse = await axios.post(
                 "http://127.0.0.1:80/api/v1/orders/bulk",
                 checkoutData,
@@ -39,21 +45,19 @@ const Checkout = ({ checkouts = [], user }) => {
                     },
                 }
             );
-            const orderId = orderResponse.data.order_id[0];
-            const checkoutItemsData = checkouts.flatMap((checkout) =>
-                checkout.checkout_items.map((item) => ({
-                    user_id: checkout.user_id,
-                    sub_total: item.sub_total,
+            const orderIds = orderResponse.data.order_id;
+            const checkoutItemsData = checkouts.flatMap((checkout) => {
+                // Find the matching order detail for this checkout
+                const matchId = orderIds.find((id) => id === checkout.id);
+
+                return checkout.checkout_items.map((item) => ({
                     product_id: item.product_id,
                     quantity: item.quantity,
                     price: item.price,
-                    status: "pending",
-                    order_id: orderId,
-                    shipping_fee: checkout.shipping_fee,
+                    order_id: matchId,
                     created_at: formatDate(checkout.created_at),
-                }))
-            );
-            console.log(checkoutItemsData);
+                }));
+            });
 
             const orderItemsResponse = await axios.post(
                 "http://127.0.0.1:80/api/v1/orderitems/bulk",
@@ -89,11 +93,13 @@ const Checkout = ({ checkouts = [], user }) => {
             .then((response) => {
                 response.data.data.forEach((data) => {
                     data.products.forEach((product) => {
-                        const checkoutItem = checkouts[0].checkout_items.find(
-                            (item) => item.product_id == product.id
-                        );
-                        product.quantity = checkoutItem
-                            ? checkoutItem.quantity
+                        // Find the first matching checkout item across all checkouts
+                        const matchingCheckoutItem = checkouts
+                            .flatMap((checkout) => checkout.checkout_items)
+                            .find((item) => item.product_id == product.id);
+
+                        product.quantity = matchingCheckoutItem
+                            ? matchingCheckoutItem.quantity
                             : 0;
                     });
                 });
@@ -106,6 +112,7 @@ const Checkout = ({ checkouts = [], user }) => {
     useEffect(() => {
         calculateTotalPayment();
     }, [checkouts]);
+    console.log(checkoutItems);
 
     return (
         <>

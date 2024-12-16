@@ -91,7 +91,6 @@ const Cart = ({ cartItems = [], user }) => {
     };
     //handle checkout
     const handleCheckout = () => {
-        // console.log(selectedProducts);
         if (selectedProducts.length === 0) {
             alert("Please select at least one product");
             return;
@@ -117,8 +116,6 @@ const Cart = ({ cartItems = [], user }) => {
 
         router.post(route("checkout.store"), {
             items: checkoutItems,
-            total_amount: totals.totalAmount,
-            total_quantity: totals.totalQuantity,
         });
     };
 

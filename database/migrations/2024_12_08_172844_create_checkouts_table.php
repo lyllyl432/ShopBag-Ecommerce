@@ -16,7 +16,6 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class)->constrained();
             $table->integer('total_amount');
-            $table->integer('total_quantity');
             $table->integer('shipping_fee');
             $table->timestamps();
         });

@@ -12,7 +12,7 @@ const PurchaseProductTopInfo = ({ data, status }) => {
     return (
         <div className="flex justify-between">
             <div>
-                <h2 className="font-bold">{data.brand}</h2>
+                <h2 className="font-bold">{data.brand_name}</h2>
             </div>
             <div>
                 <h2 className="font-bold">{getStatusText(status)}</h2>

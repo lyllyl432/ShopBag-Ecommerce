@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 
-const PurchaseProduct = ({ data, setStatus }) => {
+const PurchaseProduct = ({ item, setStatus }) => {
     useEffect(() => {
-        setStatus(data.status);
-    }, [data.status]);
+        setStatus(item.status);
+    }, [item]);
     return (
         <div className="flex justify-between items-center mt-4">
             <div className="flex gap-4 items-center">
@@ -11,12 +11,12 @@ const PurchaseProduct = ({ data, setStatus }) => {
                     <img className="w-20" src="images/product.png" alt="" />
                 </div>
                 <div>
-                    <h2>{data.product.productName}</h2>
-                    <p>{`x${data.quantity}`}</p>
+                    <h2>{item.product_name}</h2>
+                    <p>{`x${item.quantity}`}</p>
                 </div>
             </div>
             <div>
-                <p>{data.price * data.quantity}</p>
+                <p>{item.price * item.quantity}</p>
             </div>
         </div>
     );
